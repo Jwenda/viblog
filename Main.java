@@ -61,6 +61,7 @@ public class Main extends AppCompatActivity implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
+
         if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             vibX.setText(Float.toString(sensorEvent.values[0]));
             vibY.setText(Float.toString(sensorEvent.values[1]));
@@ -69,16 +70,17 @@ public class Main extends AppCompatActivity implements SensorEventListener {
             graX.setText(Float.toString(sensorEvent.values[0]));
             graY.setText(Float.toString(sensorEvent.values[1]));
             graZ.setText(Float.toString(sensorEvent.values[2]));
-        } else if (sensorEvent.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION){
+        } else if (sensorEvent.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
             accX.setText(Float.toString(sensorEvent.values[0]));
             accY.setText(Float.toString(sensorEvent.values[1]));
             accZ.setText(Float.toString(sensorEvent.values[2]));
-            if (save.isChecked()) {
-                writeFile(sensorEvent);
-            } else if (mqtt.isChecked()) {
-                writeStream(sensorEvent);
-            }
         }
+        if (save.isChecked()) {
+            writeFile(sensorEvent);
+        } else if (mqtt.isChecked()) {
+            writeStream(sensorEvent);
+        }
+
     }
 
     @Override
@@ -100,26 +102,26 @@ public class Main extends AppCompatActivity implements SensorEventListener {
         String content = (x + ";" + y + ";" + z + System.getProperty("line.separator"));
         int qos = 2;
 
-        System.out.println("Publishing message: "+content);
+        System.out.println("Publishing message: " + content);
         MqttMessage message = new MqttMessage(content.getBytes());
         message.setQos(qos);
 
         try {
             client.publish(topic, message);
             System.out.println("Message published");
-        } catch(MqttException me) {
-            System.out.println("reason "+me.getReasonCode());
-            System.out.println("msg "+me.getMessage());
-            System.out.println("loc "+me.getLocalizedMessage());
-            System.out.println("cause "+me.getCause());
-            System.out.println("excep "+me);
+        } catch (MqttException me) {
+            System.out.println("reason " + me.getReasonCode());
+            System.out.println("msg " + me.getMessage());
+            System.out.println("loc " + me.getLocalizedMessage());
+            System.out.println("cause " + me.getCause());
+            System.out.println("excep " + me);
             me.printStackTrace();
         }
     }
 
     public void prepareStream() {
-        String broker       = "tcp://iot.eclipse.org:1883";
-        String clientId     = "Android#1";
+        String broker = "tcp://iot.eclipse.org:1883";
+        String clientId = "Android#1";
         MemoryPersistence persistence = new MemoryPersistence();
 
         try {
@@ -128,12 +130,12 @@ public class Main extends AppCompatActivity implements SensorEventListener {
             connOpts.setCleanSession(true);
             client.connect(connOpts);
             System.out.println("Connected");
-        } catch(MqttException me) {
-            System.out.println("reason "+me.getReasonCode());
-            System.out.println("msg "+me.getMessage());
-            System.out.println("loc "+me.getLocalizedMessage());
-            System.out.println("cause "+me.getCause());
-            System.out.println("excep "+me);
+        } catch (MqttException me) {
+            System.out.println("reason " + me.getReasonCode());
+            System.out.println("msg " + me.getMessage());
+            System.out.println("loc " + me.getLocalizedMessage());
+            System.out.println("cause " + me.getCause());
+            System.out.println("excep " + me);
             me.printStackTrace();
         }
     }
@@ -141,17 +143,17 @@ public class Main extends AppCompatActivity implements SensorEventListener {
     public void closeStream() {
         try {
             client.disconnect();
-        } catch(MqttException me) {
-            System.out.println("reason "+me.getReasonCode());
-            System.out.println("msg "+me.getMessage());
-            System.out.println("loc "+me.getLocalizedMessage());
-            System.out.println("cause "+me.getCause());
-            System.out.println("excep "+me);
+        } catch (MqttException me) {
+            System.out.println("reason " + me.getReasonCode());
+            System.out.println("msg " + me.getMessage());
+            System.out.println("loc " + me.getLocalizedMessage());
+            System.out.println("cause " + me.getCause());
+            System.out.println("excep " + me);
             me.printStackTrace();
         }
     }
 
-    public void writeFile(SensorEvent sensor){
+    public void writeFile(SensorEvent sensor) {
         String x = Float.toString(sensor.values[0]);
         String y = Float.toString(sensor.values[1]);
         String z = Float.toString(sensor.values[2]);
@@ -163,7 +165,7 @@ public class Main extends AppCompatActivity implements SensorEventListener {
         }
     }
 
-    public void prepareFile(){
+    public void prepareFile() {
         long timestamp = System.currentTimeMillis();
         try {
             File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), Long.toString(timestamp) + ".txt");
@@ -175,7 +177,7 @@ public class Main extends AppCompatActivity implements SensorEventListener {
         }
     }
 
-    public void closeFile(){
+    public void closeFile() {
         try {
             ostream.close();
             fostream.close();
@@ -184,31 +186,31 @@ public class Main extends AppCompatActivity implements SensorEventListener {
         }
     }
 
-    public void prepareSensors(){
-        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+    public void prepareSensors() {
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
         mAcceleration = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
     }
 
-    public void prepareLayout(){
-        vibX = (TextView)findViewById(R.id.vibX);
-        vibY = (TextView)findViewById(R.id.vibY);
-        vibZ = (TextView)findViewById(R.id.vibZ);
-        graX = (TextView)findViewById(R.id.graX);
-        graY = (TextView)findViewById(R.id.graY);
-        graZ = (TextView)findViewById(R.id.graZ);
-        accX = (TextView)findViewById(R.id.accX);
-        accY = (TextView)findViewById(R.id.accY);
-        accZ = (TextView)findViewById(R.id.accZ);
+    public void prepareLayout() {
+        vibX = (TextView) findViewById(R.id.vibX);
+        vibY = (TextView) findViewById(R.id.vibY);
+        vibZ = (TextView) findViewById(R.id.vibZ);
+        graX = (TextView) findViewById(R.id.graX);
+        graY = (TextView) findViewById(R.id.graY);
+        graZ = (TextView) findViewById(R.id.graZ);
+        accX = (TextView) findViewById(R.id.accX);
+        accY = (TextView) findViewById(R.id.accY);
+        accZ = (TextView) findViewById(R.id.accZ);
 
-        tgl = (ToggleButton)findViewById(R.id.start);
-        save = (RadioButton)findViewById(R.id.log);
-        mqtt = (RadioButton)findViewById(R.id.mqtt);
+        tgl = (ToggleButton) findViewById(R.id.start);
+        save = (RadioButton) findViewById(R.id.log);
+        mqtt = (RadioButton) findViewById(R.id.mqtt);
     }
 
-    public void tglClick(View v){
-        if(tgl.isChecked()) {
+    public void tglClick(View v) {
+        if (tgl.isChecked()) {
             if (save.isChecked()) {
                 prepareFile();
             } else if (mqtt.isChecked()) {
@@ -221,9 +223,9 @@ public class Main extends AppCompatActivity implements SensorEventListener {
             save.setEnabled(false);
             mqtt.setEnabled(false);
         } else {
-            if (save.isChecked()){
+            if (save.isChecked()) {
                 closeFile();
-            } else if(mqtt.isChecked()) {
+            } else if (mqtt.isChecked()) {
                 closeStream();
             }
 
